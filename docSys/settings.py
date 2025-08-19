@@ -30,6 +30,16 @@ INSTALLED_APPS = [
     'docSys_app',
 ]
 
+
+# Where uploads go (dev)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Auth redirects (optional but nice)
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/index/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

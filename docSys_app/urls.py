@@ -7,9 +7,10 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.showDemoPage, name="demo")
+    #path('', views.showDemoPage, name="demo")
     #path('',views.index, name="index"),
     #path('demo/', views.showDemoPage),
+    path('index/', views.showIndexPage, name="index"),
 
 ]
 
