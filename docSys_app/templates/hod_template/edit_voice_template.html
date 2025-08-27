@@ -1,0 +1,73 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Edit Voice | Voice ID : {{ voice.id }}
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Edit Voice</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" action="/edit_voice_save" method="post">
+                  {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Voice Name </label>
+                    <input type="text" class="form-control" name="voice_name" placeholder="Enter Voice" value="{{ voice.voice_name }}">
+                    <input type="hidden" class="form-control" name="voice_id" placeholder="Enter Voice" value="{{ voice.id }}">
+                  </div>
+                   <div class="form-group">
+                    <label>House </label>
+                    <select class="form-control" name="house">
+                        {% for house in houses %}
+                              <option value="{{ house.id }}" {% if house.id == voice.house_id.id %} selected {% endif %}>{{ house.house_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Staff</label>
+                    <select class="form-control" name="staff">
+                        {% for staff in staffs %}
+                          <option value="{{ staff.id }}" {% if staff.id == subject.staff_id.id %} selected {% endif %}>{{ staff.first_name }} {{ staff.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                   <div class="form-group">
+                      {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary btn-block">Save Voice</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
+
+
+
+          </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+

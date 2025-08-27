@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'docSys_app',
 ]
 
+# Specify custom user model
+AUTH_USER_MODEL = "docSys_app.CustomUser"
 
 # Where uploads go (dev)
 MEDIA_URL = '/media/'
@@ -37,7 +39,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Auth redirects (optional but nice)
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/index/'
+LOGIN_REDIRECT_URL = '/redirect_dashboard/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 MIDDLEWARE = [
