@@ -3,6 +3,7 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.db import IntegrityError
 
 from docSys_app.forms import AddMemberForm, EditMemberForm
 from docSys_app.models import CustomUser, Staffs, Houses, Voices, Members
@@ -56,69 +57,90 @@ def add_member(request):
     return render(request,"hod_template/add_member_template.html",{"form":form})
 
 def add_member_save(request):
-    if request.method!="POST":
+    if request.method != "POST":
         return HttpResponse("Method Not Allowed")
     else:
-        form=AddMemberForm(request.POST,request.FILES)
+        form = AddMemberForm(request.POST, request.FILES)
         if form.is_valid():
-            first_name=form.cleaned_data["first_name"]
-            last_name=form.cleaned_data["last_name"]
-            username=form.cleaned_data["username"]
-            email=form.cleaned_data["email"]
-            password=form.cleaned_data["password"]
-            address=form.cleaned_data["address"]
-            session_start=form.cleaned_data["session_start"]
-            session_end=form.cleaned_data["session_end"]
-            house_id=form.cleaned_data["house"]
-            sex=form.cleaned_data["sex"]
+            # Extract fields from form
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
+            username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            address = form.cleaned_data["address"]
+            session_start = form.cleaned_data["session_start"]
+            house_id = form.cleaned_data["house"]
+            voice_id = form.cleaned_data["voice"]   # ✅ new field
+            sex = form.cleaned_data["sex"]
 
-            profile_pic=request.FILES['profile_pic']
-            fs=FileSystemStorage()
-            filename=fs.save(profile_pic.name,profile_pic)
-            profile_pic_url=fs.url(filename)
+            # Save profile picture
+            profile_pic = request.FILES['profile_pic']
+            fs = FileSystemStorage()
+            filename = fs.save(profile_pic.name, profile_pic)
+            profile_pic_url = fs.url(filename)
 
             try:
-                user=CustomUser.objects.create_user(username=username,password=password,email=email,last_name=last_name,first_name=first_name,user_type=3)
-                user.members.address=address
-                house_obj=Houses.objects.get(id=house_id)
-                user.members.house_id=house_obj
-                user.members.session_start_year=session_start
-                user.members.session_end_year=session_end
-                user.members.gender=sex
-                user.members.profile_pic=profile_pic_url
+                # Create custom user of type 3 (Member)
+                user = CustomUser.objects.create_user(
+                    username=username,
+                    password=password,
+                    email=email,
+                    last_name=last_name,
+                    first_name=first_name,
+                    user_type= 3   # ✅ stored as string
+                )
+
+                # Fill extra details in Member profile
+                user.members.address = address
+                user.members.session_start_year = session_start
+                user.members.gender = sex
+                user.members.profile_pic = profile_pic_url
+
+                # Assign House
+                house_obj = Houses.objects.get(id=house_id)
+                user.members.house_id = house_obj
+
+                # Assign Voice ✅
+                voice_obj = Voices.objects.get(id=voice_id)
+                user.members.voice_id = voice_obj
+
+                # Save user + member
                 user.save()
-                messages.success(request,"Successfully Added Member")
+
+                messages.success(request, "Successfully Added Member")
                 return HttpResponseRedirect(reverse("add_member"))
-            except:
-                messages.error(request,"Failed to Add Member")
+            except Exception as e:
+                print("❌ Error Adding Member:", e)  # helpful for debugging
+                messages.error(request, "Failed to Add Member")
                 return HttpResponseRedirect(reverse("add_member"))
         else:
-            form=AddMemberForm(request.POST)
-            return render(request, "hod_template/add_member_template.html", {"form": form})
+            # Reload form with validation errors
+            return render(
+                request,
+                "hod_template/add_member_template.html",
+                {"form": form}
+            )
+
 
 
 def add_voice(request):
-    houses=Houses.objects.all()
-    staffs=CustomUser.objects.filter(user_type=2)
-    return render(request,"hod_template/add_voice_template.html",{"staffs":staffs,"houses":houses})
+    return render(request, "hod_template/add_voice_template.html")
+
 
 def add_voice_save(request):
-    if request.method!="POST":
+    if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        voice_name=request.POST.get("voice_name")
-        house_id=request.POST.get("house")
-        house=Houses.objects.get(id=house_id)
-        staff_id=request.POST.get("staff")
-        staff=CustomUser.objects.get(id=staff_id)
+        voice_name = request.POST.get("voice_name")
 
         try:
-            voice=Voices(voice_name=voice_name,house_id=house,staff_id=staff)
+            voice = Voices(voice_name=voice_name)
             voice.save()
-            messages.success(request,"Successfully Added Voice")
+            messages.success(request, "Successfully Added Voice")
             return HttpResponseRedirect(reverse("add_voice"))
-        except:
-            messages.error(request,"Failed to Add Voice")
+        except Exception as e:
+            messages.error(request, f"Failed to Add Voice: {str(e)}")
             return HttpResponseRedirect(reverse("add_voice"))
 
 
@@ -170,6 +192,25 @@ def edit_staff_save(request):
             messages.error(request,"Failed to Edit Staff")
             return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
 
+def delete_staff(request, staff_id):
+    try:
+        user = CustomUser.objects.get(id=staff_id)
+
+        # Safety check: only allow deleting staff
+        if user.user_type != 2:
+            messages.error(request, "Cannot delete. Selected user is not a staff member.")
+            return HttpResponseRedirect(reverse("manage_staff"))
+
+        user.delete()  # Deletes staff + linked profile
+        messages.success(request, "Staff deleted successfully.")
+    except CustomUser.DoesNotExist:
+        messages.error(request, "Staff does not exist.")
+    except Exception as e:
+        messages.error(request, f"Error deleting staff: {str(e)}")
+
+    return HttpResponseRedirect(reverse("manage_staff"))
+
+
 def edit_member(request,member_id):
     request.session['member_id']=member_id
     member=Members.objects.get(admin=member_id)
@@ -182,18 +223,17 @@ def edit_member(request,member_id):
     form.fields['house'].initial=member.house_id.id
     form.fields['sex'].initial=member.gender
     form.fields['session_start'].initial=member.session_start_year
-    form.fields['session_end'].initial=member.session_end_year
     return render(request,"hod_template/edit_member_template.html",{"form":form,"id":member_id,"username":member.admin.username})
 
 def edit_member_save(request):
-    if request.method!="POST":
+    if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        member_id=request.session.get("member_id")
-        if member_id==None:
+        member_id = request.session.get("member_id")
+        if member_id is None:
             return HttpResponseRedirect(reverse("manage_member"))
 
-        form=EditMemberForm(request.POST,request.FILES)
+        form = EditMemberForm(request.POST, request.FILES)
         if form.is_valid():
             first_name = form.cleaned_data["first_name"]
             last_name = form.cleaned_data["last_name"]
@@ -201,77 +241,124 @@ def edit_member_save(request):
             email = form.cleaned_data["email"]
             address = form.cleaned_data["address"]
             session_start = form.cleaned_data["session_start"]
-            session_end = form.cleaned_data["session_end"]
             house_id = form.cleaned_data["house"]
             sex = form.cleaned_data["sex"]
+            voice_id = form.cleaned_data["voice"]  # ✅ new field for voices
 
-            if request.FILES.get('profile_pic',False):
-                profile_pic=request.FILES['profile_pic']
-                fs=FileSystemStorage()
-                filename=fs.save(profile_pic.name,profile_pic)
-                profile_pic_url=fs.url(filename)
+            # Handle profile picture
+            if request.FILES.get('profile_pic', False):
+                profile_pic = request.FILES['profile_pic']
+                fs = FileSystemStorage()
+                filename = fs.save(profile_pic.name, profile_pic)
+                profile_pic_url = fs.url(filename)
             else:
-                profile_pic_url=None
-
+                profile_pic_url = None
 
             try:
-                user=CustomUser.objects.get(id=member_id)
-                user.first_name=first_name
-                user.last_name=last_name
-                user.username=username
-                user.email=email
+                # Update user details
+                user = CustomUser.objects.get(id=member_id)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.username = username
+                user.email = email
                 user.save()
 
-                member=Members.objects.get(admin=member_id)
-                member.address=address
-                member.session_start_year=session_start
-                member.session_end_year=session_end
-                member.gender=sex
-                house=Houses.objects.get(id=house_id)
-                member.house_id=house
-                if profile_pic_url!=None:
-                    member.profile_pic=profile_pic_url
-                member.save()
-                del request.session['member_id']
-                messages.success(request,"Successfully Edited Member")
-                return HttpResponseRedirect(reverse("edit_member",kwargs={"member_id":member_id}))
-            except:
-                messages.error(request,"Failed to Edit Member")
-                return HttpResponseRedirect(reverse("edit_member",kwargs={"member_id":member_id}))
-        else:
-            form=EditMemberForm(request.POST)
-            member=Members.objects.get(admin=member_id)
-            return render(request,"hod_template/edit_member_template.html",{"form":form,"id":member_id,"username":member.admin.username})
+                # Update member details
+                member = Members.objects.get(admin=member_id)
+                member.address = address
+                member.session_start_year = session_start
+                member.gender = sex
 
-def edit_voice(request,voice_id):
-    voice=Voices.objects.get(id=voice_id)
-    houses=Houses.objects.all()
-    staffs=CustomUser.objects.filter(user_type=2)
-    return render(request,"hod_template/edit_voice_template.html",{"voice":voice,"staffs":staffs,"houses":houses,"id":voice_id})
+                # Assign house
+                house = Houses.objects.get(id=house_id)
+                member.house_id = house
+
+                # ✅ Assign voice
+                voice = Voices.objects.get(id=voice_id)
+                member.voice_id = voice
+
+                if profile_pic_url is not None:
+                    member.profile_pic = profile_pic_url
+
+                member.save()
+
+                del request.session['member_id']
+                messages.success(request, "Successfully Edited Member")
+                return HttpResponseRedirect(reverse("edit_member", kwargs={"member_id": member_id}))
+
+            except Exception as e:
+                messages.error(request, f"Failed to Edit Member: {e}")
+                return HttpResponseRedirect(reverse("edit_member", kwargs={"member_id": member_id}))
+        else:
+            form = EditMemberForm(request.POST)
+            member = Members.objects.get(admin=member_id)
+            return render(request, "hod_template/edit_member_template.html", {
+                "form": form,
+                "id": member_id,
+                "username": member.admin.username
+            })
+
+
+def delete_member(request, member_id):
+    try:
+        user = CustomUser.objects.get(id=member_id)
+
+        # Safety check: only allow deleting members
+        if user.user_type != 3:
+            messages.error(request, "Cannot delete. Selected user is not a member.")
+            return HttpResponseRedirect(reverse("manage_member"))
+
+        user.delete()  # Cascades & deletes linked Member profile
+        messages.success(request, "Member deleted successfully.")
+    except CustomUser.DoesNotExist:
+        messages.error(request, "Member does not exist.")
+    except Exception as e:
+        messages.error(request, f"Error deleting member: {str(e)}")
+
+    return HttpResponseRedirect(reverse("manage_member"))
+
+def edit_voice(request, voice_id):
+    voice = Voices.objects.get(id=voice_id)
+    return render(request, "hod_template/edit_voice_template.html", {"voice": voice, "id": voice_id})
+
 
 def edit_voice_save(request):
-    if request.method!="POST":
+    if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        voice_id=request.POST.get("voice_id")
-        voice_name=request.POST.get("voice_name")
-        staff_id=request.POST.get("staff")
-        house_id=request.POST.get("house")
+        voice_id = request.POST.get("voice_id")
+        voice_name = request.POST.get("voice_name")
 
         try:
-            voice=Voices.objects.get(id=voice_id)
-            voice.voice_name=voice_name
-            staff=CustomUser.objects.get(id=staff_id)
-            voice.staff_id=staff
-            house=Houses.objects.get(id=house_id)
-            voice.house_id=house
+            voice = Voices.objects.get(id=voice_id)
+            voice.voice_name = voice_name
             voice.save()
 
-            messages.success(request,"Successfully Edited Voice")
-            return HttpResponseRedirect(reverse("edit_voice",kwargs={"voice_id":voice_id}))
-        except:
-            messages.error(request,"Failed to Edit Voice")
-            return HttpResponseRedirect(reverse("edit_voice",kwargs={"voice_id":voice_id}))
+            messages.success(request, "Successfully Edited Voice")
+            return HttpResponseRedirect(reverse("edit_voice", kwargs={"voice_id": voice_id}))
+        except Exception as e:
+            messages.error(request, f"Failed to Edit Voice: {str(e)}")
+            return HttpResponseRedirect(reverse("edit_voice", kwargs={"voice_id": voice_id}))
+
+
+def delete_voice(request, voice_id):
+    try:
+        voice = Voices.objects.get(id=voice_id)
+        
+        # Check if members are assigned to this voice
+        if Members.objects.filter(voice_id=voice).exists():
+            messages.error(request, "Cannot delete voice. It has members assigned.")
+            return HttpResponseRedirect(reverse("manage_voice"))
+            
+        # If no members, safe to delete
+        voice.delete()
+        messages.success(request, "Voice deleted successfully.")
+    except Voices.DoesNotExist:
+        messages.error(request, "Voice does not exist.")
+    except Exception as e:
+        messages.error(request, f"Error deleting voice: {str(e)}")
+    
+    return HttpResponseRedirect(reverse("manage_voice"))
 
 
 def edit_house(request,house_id):
@@ -294,3 +381,23 @@ def edit_house_save(request):
         except:
             messages.error(request,"Failed to Edit House")
             return HttpResponseRedirect(reverse("edit_house",kwargs={"house_id":house_id}))
+        
+def delete_house(request, house_id):
+    try:
+        house = Houses.objects.get(id=house_id)
+
+        # Check if the house is referenced by Members before deleting
+        if Members.objects.filter(house_id=house).exists():
+            messages.error(request, "Cannot delete house. It has members assigned.")
+            return HttpResponseRedirect(reverse("manage_house"))
+
+        house.delete()
+        messages.success(request, "House deleted successfully.")
+    except Houses.DoesNotExist:
+        messages.error(request, "House does not exist.")
+    except Exception as e:
+        messages.error(request, f"Error deleting house: {str(e)}")
+
+    return HttpResponseRedirect(reverse("manage_house"))
+
+

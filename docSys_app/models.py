@@ -6,7 +6,7 @@ from django.dispatch import receiver
 # Create your models here.
 class CustomUser(AbstractUser):
     user_type_data=((1,"HOD"),(2,"Staff"),(3,"Members"))
-    user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
+    user_type=models.IntegerField(default=1,choices=user_type_data)
 
 class AdminHOD(models.Model):
     id=models.AutoField(primary_key=True)
@@ -32,22 +32,23 @@ class Houses(models.Model):
 
 class Voices(models.Model):
     id=models.AutoField(primary_key=True)
-    voice_name=models.CharField(max_length=255)
-    house_id=models.ForeignKey(Houses,on_delete=models.CASCADE,default=1)
-    staff_id=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    voice_name=models.CharField(max_length=255, unique=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
+
+    def __str__(self):
+        return self.voice_name
 
 class Members(models.Model):
     id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     gender=models.CharField(max_length=255)
-    profile_pic=models.FileField()
+    profile_pic=models.FileField(null=True, blank=True, default="")
     address=models.TextField()
-    house_id=models.ForeignKey(Houses,on_delete=models.DO_NOTHING)
+    house_id=models.ForeignKey(Houses, on_delete=models.SET_NULL, null=True, blank=True)
+    voice_id=models.ForeignKey(Voices, on_delete=models.SET_NULL, null=True, blank=True)
     session_start_year=models.DateField()
-    session_end_year=models.DateField()
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
@@ -131,21 +132,35 @@ class NotificationStaffs(models.Model):
     objects = models.Manager()
 
 
-@receiver(post_save,sender=CustomUser)
-def create_user_profile(sender,instance,created,**kwargs):
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if instance.user_type==1:
+        if instance.user_type == 1:
             AdminHOD.objects.create(admin=instance)
-        if instance.user_type==2:
-            Staffs.objects.create(admin=instance,address="")
-        if instance.user_type==3:
-            Members.objects.create(admin=instance,course_id=Houses.objects.get(id=1),session_start_year="2020-01-01",session_end_year="2021-01-01",address="",profile_pic="",gender="")
 
-@receiver(post_save,sender=CustomUser)
-def save_user_profile(sender,instance,**kwargs):
-    if instance.user_type==1:
+        elif instance.user_type == 2:
+            Staffs.objects.create(admin=instance, address="")
+
+        elif instance.user_type == 3:
+            # Safely get default house and voice
+            default_house = Houses.objects.first()
+            default_voice = Voices.objects.first()
+
+            Members.objects.create(
+                admin=instance,
+                house_id=default_house if default_house else None,
+                voice_id=default_voice if default_voice else None,
+                session_start_year="2020-01-01",  # keep if you want only start year
+                address="",
+                profile_pic="",
+                gender=""
+            )
+
+@receiver(post_save, sender=CustomUser)
+def save_user_profile(sender, instance, **kwargs):
+    if instance.user_type == 1:
         instance.adminhod.save()
-    if instance.user_type==2:
+    elif instance.user_type == 2:
         instance.staffs.save()
-    if instance.user_type==3:
+    elif instance.user_type == 3:
         instance.members.save()

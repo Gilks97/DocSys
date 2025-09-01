@@ -51,8 +51,35 @@ Manage Staff
                       <td>{{ staff.address }}</td>
                       <td>{{ staff.admin.last_login }}</td>
                       <td>{{ staff.admin.date_joined }}</td>
-                      <td><a href="/edit_staff/{{ staff.admin.id }}" class="btn btn-success">Edit</a></td>
+                      <td>
+                        <a href="{% url 'edit_staff' staff_id=staff.admin.id %}" class="btn btn-success">Edit</a>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ staff.admin.id }}">Delete</button>
+                      </td>
                     </tr>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal{{ staff.admin.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to delete staff "<strong>{{ staff.admin.username }}</strong>"?
+                            <p class="text-danger"><small>This action cannot be undone.</small></p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <a href="{% url 'delete_staff' staff_id=staff.admin.id %}" class="btn btn-danger">Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                   {% endfor %}
                   </tbody>
                 </table>

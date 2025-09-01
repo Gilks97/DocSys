@@ -24,6 +24,47 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+
+          <li class="nav-item">
+            {% url 'add_house' as add_house %}
+            <a href="{% url 'add_house' %}" class="nav-link {% if request.path == add_house %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Add House
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            {% url 'manage_house' as manage_house %}
+              {% url 'edit_house' house_id=id as edit_house %}
+            <a href="{% url 'manage_house' %}" class="nav-link {% if request.path == manage_house %} active {% endif %} {% if request.path == edit_house %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Manage House
+              </p>
+            </a>
+          </li>     
+
+          <li class="nav-item">
+            {% url 'add_voice' as add_voice %}
+            <a href="{% url 'add_voice' %}" class="nav-link {% if request.path == add_voice %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Add Voice
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            {% url 'manage_voice' as manage_voice %}
+            {% url 'edit_voice' voice_id=id as edit_voice %}
+            <a href="{% url 'manage_voice' %}" class="nav-link {% if request.path == manage_voice %} active {% endif %} {% if request.path == edit_voice %} active {% endif %} ">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Manage Voice
+              </p>
+            </a>
+          </li>
+
           <li class="nav-item">
             {% url 'add_staff' as add_staff %}
             <a href="{{ add_staff }}" class="nav-link {% if request.path == add_staff %} active {% endif %}">
@@ -62,44 +103,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
-            {% url 'add_house' as add_house %}
-            <a href="{% url 'add_house' %}" class="nav-link {% if request.path == add_house %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Add House
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            {% url 'manage_house' as manage_house %}
-              {% url 'edit_house' house_id=id as edit_house %}
-            <a href="{% url 'manage_house' %}" class="nav-link {% if request.path == manage_house %} active {% endif %} {% if request.path == edit_house %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Manage House
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            {% url 'add_voice' as add_voice %}
-            <a href="{% url 'add_voice' %}" class="nav-link {% if request.path == add_voice %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Add Voice
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            {% url 'manage_voice' as manage_voice %}
-            {% url 'edit_voice' voice_id=id as edit_voice %}
-            <a href="{% url 'manage_voice' %}" class="nav-link {% if request.path == manage_voice %} active {% endif %} {% if request.path == edit_voice %} active {% endif %} ">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Manage Voice
-              </p>
-            </a>
-          </li>
+          
+          
            <li class="nav-item">
              <a href="{% url 'add_staff' %}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>

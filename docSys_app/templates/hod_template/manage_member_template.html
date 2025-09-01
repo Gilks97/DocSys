@@ -38,8 +38,7 @@ Manage Member
                       <th>Gender</th>
                       <th>Profile Pic</th>
                       <th>Start Year</th>
-                      <th>End Year</th>
-                      <th>Course</th>
+                      <th>House</th>
                       <th>Last Login</th>
                       <th>Date Joined</th>
                       <th>Action</th>
@@ -57,12 +56,36 @@ Manage Member
                       <td>{{ member.gender }}</td>
                       <td><img src="{{ member.profile_pic }}" style="width:100px"/></td>
                       <td>{{ member.session_start_year }}</td>
-                      <td>{{ member.session_end_year }}</td>
-                      <td>{{ member.course_id.course_name }}</td>
+                      <td>{{ member.house_id.house_name }}</td>
                       <td>{{ member.admin.last_login }}</td>
                       <td>{{ member.admin.date_joined }}</td>
-                      <td><a href="{% url 'edit_member' member_id=member.admin.id %}" class="btn btn-success">Edit</a></td>
+                      <td>
+                        <a href="{% url 'edit_member' member_id=member.admin.id %}" class="btn btn-success">Edit</a>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ member.admin.id }}">Delete</button>
+                      </td>
                     </tr>
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal{{ member.admin.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to delete member "<strong>{{ member.admin.username }}</strong>"?
+                            <p class="text-danger"><small>This action cannot be undone.</small></p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <a href="{% url 'delete_member' member_id=member.admin.id %}" class="btn btn-danger">Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   {% endfor %}
                   </tbody>
                 </table>

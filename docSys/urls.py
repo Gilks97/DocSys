@@ -34,12 +34,16 @@ urlpatterns = [
     path('manage_voice', HodViews.manage_voice,name="manage_voice"),
     path('edit_staff/<str:staff_id>', HodViews.edit_staff,name="edit_staff"),
     path('edit_staff_save', HodViews.edit_staff_save,name="edit_staff_save"),
+    path("delete_staff/<int:staff_id>/", HodViews.delete_staff, name="delete_staff"),
     path('edit_member/<str:member_id>', HodViews.edit_member,name="edit_member"),
     path('edit_member_save', HodViews.edit_member_save,name="edit_member_save"),
+    path("delete_member/<int:member_id>/", HodViews.delete_member, name="delete_member"),
     path('edit_voice/<str:voice_id>', HodViews.edit_voice,name="edit_voice"),
     path('edit_voice_save', HodViews.edit_voice_save,name="edit_voice_save"),
+    path('delete_voice/<int:voice_id>/', HodViews.delete_voice, name='delete_voice'),
     path('edit_house/<str:house_id>', HodViews.edit_house,name="edit_house"),
     path('edit_house_save', HodViews.edit_house_save,name="edit_house_save"),
+    path('delete_house/<int:house_id>/', HodViews.delete_house, name='delete_house'),
 
 
 
