@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
-from docSys_app import views, HodViews
+from docSys_app import views, HodViews, StaffViews, MemberViews
 from docSys import settings
 
 urlpatterns = [
@@ -45,7 +45,8 @@ urlpatterns = [
     path('edit_house_save', HodViews.edit_house_save,name="edit_house_save"),
     path('delete_house/<int:house_id>/', HodViews.delete_house, name='delete_house'),
 
-
+    path('staff_home', StaffViews.staff_home, name="staff_home"),
+    path('member_home', MemberViews.member_home, name="member_home"),
 
 ]
 

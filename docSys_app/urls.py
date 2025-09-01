@@ -7,10 +7,6 @@ from . import views
 
 
 urlpatterns = [
-    #path('', views.showDemoPage, name="demo")
-    #path('',views.index, name="index"),
-    #path('demo/', views.showDemoPage),
-    #path('index/', views.index, name="index"),
     path('redirect_dashboard/', views.redirect_dashboard, name='redirect_dashboard'),
     path('index/', views.index, name='index'),
     path('staff/dashboard/', views.staff_dashboard, name='staff_dashboard'),
