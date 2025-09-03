@@ -77,11 +77,8 @@ def add_member_save(request):
             voice_id = form.cleaned_data["voice"]   # ✅ new field
             sex = form.cleaned_data["sex"]
 
-            # Save profile picture
-            profile_pic = request.FILES['profile_pic']
-            fs = FileSystemStorage()
-            filename = fs.save(profile_pic.name, profile_pic)
-            profile_pic_url = fs.url(filename)
+           # profile_pic may or may not exist
+            profile_pic = request.FILES.get("profile_pic", None)
 
             try:
                 # Create custom user of type 3 (Member)
@@ -98,7 +95,9 @@ def add_member_save(request):
                 user.members.address = address
                 user.members.session_start_year = session_start
                 user.members.gender = sex
-                user.members.profile_pic = profile_pic_url
+
+                if profile_pic:   # only if uploaded
+                    user.members.profile_pic = profile_pic
 
                 # Assign House
                 house_obj = Houses.objects.get(id=house_id)
@@ -246,19 +245,13 @@ def edit_member_save(request):
             session_start = form.cleaned_data["session_start"]
             house_id = form.cleaned_data["house"]
             sex = form.cleaned_data["sex"]
-            voice_id = form.cleaned_data["voice"]  # ✅ new field for voices
+            voice_id = form.cleaned_data["voice"]
 
-            # Handle profile picture
-            if request.FILES.get('profile_pic', False):
-                profile_pic = request.FILES['profile_pic']
-                fs = FileSystemStorage()
-                filename = fs.save(profile_pic.name, profile_pic)
-                profile_pic_url = fs.url(filename)
-            else:
-                profile_pic_url = None
+            # ✅ profile pic (optional)
+            profile_pic = request.FILES.get("profile_pic", None)
 
             try:
-                # Update user details
+                # Update user
                 user = CustomUser.objects.get(id=member_id)
                 user.first_name = first_name
                 user.last_name = last_name
@@ -266,25 +259,26 @@ def edit_member_save(request):
                 user.email = email
                 user.save()
 
-                # Update member details
-                member = Members.objects.get(admin=member_id)
+                # Update member
+                member = Members.objects.get(admin=user)
                 member.address = address
                 member.session_start_year = session_start
                 member.gender = sex
 
-                # Assign house
+                # Foreign keys
                 house = Houses.objects.get(id=house_id)
                 member.house_id = house
 
-                # ✅ Assign voice
                 voice = Voices.objects.get(id=voice_id)
                 member.voice_id = voice
 
-                if profile_pic_url is not None:
-                    member.profile_pic = profile_pic_url
+                # ✅ Only update profile picture if a new one uploaded
+                if profile_pic:
+                    member.profile_pic = profile_pic  
 
                 member.save()
 
+                # clear session
                 del request.session['member_id']
                 messages.success(request, "Successfully Edited Member")
                 return HttpResponseRedirect(reverse("edit_member", kwargs={"member_id": member_id}))
@@ -293,13 +287,14 @@ def edit_member_save(request):
                 messages.error(request, f"Failed to Edit Member: {e}")
                 return HttpResponseRedirect(reverse("edit_member", kwargs={"member_id": member_id}))
         else:
-            form = EditMemberForm(request.POST)
+            # reload with form errors
             member = Members.objects.get(admin=member_id)
             return render(request, "hod_template/edit_member_template.html", {
                 "form": form,
                 "id": member_id,
                 "username": member.admin.username
             })
+
 
 
 def delete_member(request, member_id):

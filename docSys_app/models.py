@@ -45,7 +45,7 @@ class Members(models.Model):
     id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     gender=models.CharField(max_length=255)
-    profile_pic=models.FileField(null=True, blank=True, default="")
+    profile_pic = models.ImageField(upload_to="profile_pics/", null=True, blank=True)
     address=models.TextField()
     house_id=models.ForeignKey(Houses, on_delete=models.SET_NULL, null=True, blank=True)
     voice_id=models.ForeignKey(Voices, on_delete=models.SET_NULL, null=True, blank=True)
@@ -53,6 +53,15 @@ class Members(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
+    def __str__(self):
+        return self.admin.username
+
+    def get_profile_pic(self):
+        """Return uploaded profile pic or default placeholder"""
+        if self.profile_pic:
+            return self.profile_pic.url
+        return "/static/dist/img/default_profile.jpg"   # change to the chosen default
 
 class Attendance(models.Model):
     id=models.AutoField(primary_key=True)

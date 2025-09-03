@@ -20,7 +20,7 @@ class AddMemberForm(forms.Form):
 
     sex=forms.ChoiceField(label="Sex",choices=gender_choice,widget=forms.Select(attrs={"class":"form-control"}))
     session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))
-    profile_pic=forms.FileField(label="Profile Pic",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}))
+    profile_pic=forms.FileField(label="Profile Pic",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}),required=False)
 
     # Add house field in __init__ to ensure fresh data each time
     def __init__(self, *args, **kwargs):

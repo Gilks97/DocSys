@@ -54,7 +54,7 @@ Manage Member
                       <td>{{ member.admin.email }}</td>
                       <td>{{ member.address }}</td>
                       <td>{{ member.gender }}</td>
-                      <td><img src="{{ member.profile_pic }}" style="width:100px"/></td>
+                      <td><img src="{{ member.get_profile_pic }}" class="img-circle" width="40" height="40" alt="Profile Pic"></td>
                       <td>{{ member.session_start_year }}</td>
                       <td>{{ member.house_id.house_name }}</td>
                       <td>{{ member.admin.last_login }}</td>
