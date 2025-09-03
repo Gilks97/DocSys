@@ -15,7 +15,7 @@
           <img src="{% static "dist/img/user2-160x160.jpg" %}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ user.username }}</a>
+          <a href="{% url 'staff_profile' %}" class="d-block">{{ user.username }}</a>
         </div>
       </div>
 
@@ -33,6 +33,23 @@
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            {% url 'upload_document_staff' as upload_document_staff %}
+            <a href="{{ upload_document_staff }}" class="nav-link {% if request.path == upload_document_staff %} active {% endif %}">
+              <i class="nav-icon fas fa-upload"></i>
+              <p>Upload Document</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            {% url 'staff_view_documents' as staff_view_documents %}
+            <a href="{{ staff_view_documents }}" class="nav-link {% if request.path == staff_view_documents %} active {% endif %}">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>View Documents</p>
+            </a>
+          </li>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

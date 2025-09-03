@@ -34,8 +34,8 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = "docSys_app.CustomUser"
 
 # Where uploads go (dev)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Auth redirects (optional but nice)
 LOGIN_URL = '/accounts/login/'

@@ -33,6 +33,17 @@
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            {% url 'member_view_documents' as member_view_documents %}
+            <a href="{{ member_view_documents }}" class="nav-link {% if request.path == member_view_documents %} active {% endif %}">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>View Documents</p>
+            </a>
+          </li>
+
+
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

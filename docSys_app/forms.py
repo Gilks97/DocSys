@@ -1,5 +1,6 @@
 from django import forms
-from docSys_app.models import Houses, Voices
+from docSys_app.models import Houses, Voices, Document
+
 
 class DateInput(forms.DateInput):
     input_type = "date"
@@ -74,3 +75,16 @@ class EditMemberForm(forms.Form):
             choices=[(voice.id, voice.voice_name) for voice in voices],
             widget=forms.Select(attrs={"class":"form-control"})
         )
+
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ["title", "file"]
+
+    def clean_file(self):
+        file = self.cleaned_data.get("file")
+        if file and not file.name.endswith(".pdf"):
+            raise forms.ValidationError("Only PDF files are allowed.")
+        return file
+    

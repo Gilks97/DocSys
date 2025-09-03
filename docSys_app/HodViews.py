@@ -1,9 +1,12 @@
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
+from .forms import DocumentForm
+from .models import Document
 
 from docSys_app.forms import AddMemberForm, EditMemberForm
 from docSys_app.models import CustomUser, Staffs, Houses, Voices, Members
@@ -400,4 +403,47 @@ def delete_house(request, house_id):
 
     return HttpResponseRedirect(reverse("manage_house"))
 
+@login_required
+def upload_document_admin(request):
+    if request.method == "POST":
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            doc = form.save(commit=False)
+            doc.uploaded_by = request.user
+            doc.save()
+            messages.success(request, "Document uploaded successfully.")
+            return redirect("admin_view_documents")
+    else:
+        form = DocumentForm()
+    return render(request, "hod_template/upload_document_admin.html", {"form": form})
 
+@login_required
+def admin_view_documents(request):
+    documents = Document.objects.all().order_by("-uploaded_at")
+    return render(request, "hod_template/admin_view_documents.html", {"documents": documents})
+
+# Edit document (Admin)
+def admin_edit_document(request, doc_id):
+    doc = get_object_or_404(Document, id=doc_id)
+
+    if request.method == "POST":
+        form = DocumentForm(request.POST, request.FILES, instance=doc)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Document updated successfully.")
+            return redirect("admin_view_documents")
+    else:
+        form = DocumentForm(instance=doc)
+
+    return render(request, "hod_template/admin_edit_document.html", {"form": form})
+
+
+# Delete document (Admin)
+def admin_delete_document(request, doc_id):
+    doc = get_object_or_404(Document, id=doc_id)
+    try:
+        doc.delete()
+        messages.success(request, "✅ Document deleted successfully.")
+    except Exception as e:
+        messages.error(request, f"❌ Error deleting document: {str(e)}")
+    return redirect("admin_view_documents")  # redirect back to the document list
