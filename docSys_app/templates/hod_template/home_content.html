@@ -152,3 +152,86 @@ Admin Dashboard
     <!-- /.content -->
 {% endblock main_content %}
 
+
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+
+        // Members vs Staffs
+        new Chart($('#pieChart').get(0).getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Members', 'Staffs'],
+                datasets: [{
+                    data: [{{ member_count }}, {{ staff_count }}],
+                    backgroundColor: ['#275680ff', '#0d5736ff'],
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // Members in each House (Doughnut) with Voice Breakdown
+        var houseVoiceBreakdown = {{ house_voice_breakdown|safe }};
+        new Chart($('#donutChart').get(0).getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: {{ house_name_list|safe }},
+                datasets: [{
+                    data: {{ member_count_list_in_house|safe }},
+                    backgroundColor: ['#380d70ff', '#0d5c38ff', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var house = data.labels[tooltipItem.index];
+                            var voices = houseVoiceBreakdown[house];
+                            var breakdown = Object.entries(voices)
+                                .map(function(entry) {
+                                    return entry[0] + ": " + entry[1];
+                                })
+                                .join(", ");
+                            return house + " has " + breakdown;
+                        }
+                    }
+                }
+            }
+        });
+
+        // Members per House (Bar)
+        new Chart($('#pieChart3').get(0).getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: {{ house_name_list|safe }},
+                datasets: [{
+                    label: "Members per House",
+                    data: {{ member_count_list_in_house|safe }},
+                    backgroundColor: '#3c8dbc',
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // Members per Voice (Horizontal Bar)
+        new Chart($('#pieChart4').get(0).getContext('2d'), {
+            type: 'horizontalBar',   // Chart.js v2 uses this type
+            data: {
+                labels: {{ voice_list|safe }},
+                datasets: [{
+                    label: "Members per Voice",
+                    data: {{ member_count_list_in_voice|safe }},
+                    backgroundColor: '#00a65a',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+    });
+</script>
+{% endblock custom_js %}
