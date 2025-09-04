@@ -1,11 +1,152 @@
 {% extends 'hod_template/base_template.html' %}
 {% block page_title %}
-Home
+Admin Dashboard
 {% endblock page_title %}
 {% block main_content %}
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-3 col-6">
+
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>{{ member_count }}</h3>
+
+                <p>Total Members</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-stalker"></i>
+              </div>
+              <a href="{% url 'manage_member' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>{{ staff_count }}</h3>
+
+                <p>Total Staffs</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-android-people"></i>
+              </div>
+              <a href="{% url 'manage_staff' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>{{ house_count }}</h3>
+
+                <p>Total Houses</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-home"></i>
+              </div>
+              <a href="{% url 'manage_house' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-secondary">
+              <div class="inner">
+                <h3>{{ document_count }}</h3>
+
+                <p>Total Documents</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-document-text"></i>
+              </div>
+              <a href="{% url 'admin_view_documents' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+          <div class="row">
+              <div class="col-lg-6">
+                <div class="card card-secondary">
+                  <div class="card-header">
+                    <h3 class="card-title">Member and Staff Chart</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+              <div class="col-lg-6">
+                   <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Total Voice in Each Houses</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-lg-6">
+                 <div class="card card-info">
+                  <div class="card-header">
+                    <h3 class="card-title">Total Member in Each House</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="pieChart3" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+              <div class="col-lg-6">
+                 <div class="card card-warning">
+                  <div class="card-header">
+                    <h3 class="card-title">Total Member in Each Voice</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="pieChart4" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+          </div>
+
+
+
+          </div>
+        </div>
       </div>
     </section>
     <!-- /.content -->

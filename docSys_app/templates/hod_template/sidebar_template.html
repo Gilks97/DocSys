@@ -28,84 +28,81 @@
                with font-awesome or any other icon font library -->
 
           <li class="nav-item">
-            {% url 'add_house' as add_house %}
-            <a href="{% url 'add_house' %}" class="nav-link {% if request.path == add_house %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Add House
-              </p>
+            {% url 'admin_home' as admin_home %}
+            <a href="{% url 'admin_home' %}" class="nav-link {% if request.path == admin_home %} active {% endif %}">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Home</p>
             </a>
           </li>
-          <li class="nav-item">
-            {% url 'manage_house' as manage_house %}
-              {% url 'edit_house' house_id=id as edit_house %}
-            <a href="{% url 'manage_house' %}" class="nav-link {% if request.path == manage_house %} active {% endif %} {% if request.path == edit_house %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Manage House
-              </p>
-            </a>
-          </li>     
 
           <li class="nav-item">
-            {% url 'add_voice' as add_voice %}
-            <a href="{% url 'add_voice' %}" class="nav-link {% if request.path == add_voice %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Add Voice
-              </p>
+            {% url 'add_member' as add_member %}
+            <a href="{% url 'add_member' %}" class="nav-link {% if request.path == add_member %} active {% endif %}">
+              <i class="nav-icon fas fa-user-plus"></i>
+              <p>Add Member</p>
             </a>
           </li>
+
           <li class="nav-item">
-            {% url 'manage_voice' as manage_voice %}
-            {% url 'edit_voice' voice_id=id as edit_voice %}
-            <a href="{% url 'manage_voice' %}" class="nav-link {% if request.path == manage_voice %} active {% endif %} {% if request.path == edit_voice %} active {% endif %} ">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Manage Voice
-              </p>
+            {% url 'manage_member' as manage_member %}
+            {% url 'edit_member' member_id=id as edit_member %}
+            <a href="{% url 'manage_member' %}" class="nav-link {% if request.path == manage_member %} active {% endif %} {% if request.path == edit_member %} active {% endif %}">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Manage Members</p>
             </a>
           </li>
 
           <li class="nav-item">
             {% url 'add_staff' as add_staff %}
             <a href="{{ add_staff }}" class="nav-link {% if request.path == add_staff %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Add Staff
-              </p>
+              <i class="nav-icon fas fa-user-plus"></i>
+              <p>Add Staff</p>
             </a>
           </li>
-           <li class="nav-item">
-              {% url 'manage_staff' as manage_staff %}
+
+          <li class="nav-item">
+            {% url 'manage_staff' as manage_staff %}
             {% url 'edit_staff' staff_id=id as edit_staff %}
             <a href="{% url 'manage_staff' %}" class="nav-link {% if request.path == manage_staff %} active {% endif %} {% if request.path == edit_staff %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Manage Staff
-              </p>
+              <i class="nav-icon fas fa-users-cog"></i>
+              <p>Manage Staff</p>
             </a>
           </li>
+
           <li class="nav-item">
-              {% url 'add_member' as add_member %}
-            <a href="{% url 'add_member' %}" class="nav-link {% if request.path == add_member %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Add Member
-              </p>
+            {% url 'add_house' as add_house %}
+            <a href="{% url 'add_house' %}" class="nav-link {% if request.path == add_house %} active {% endif %}">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Add House</p>
             </a>
           </li>
+
           <li class="nav-item">
-              {% url 'manage_member' as manage_member %}
-              {% url 'edit_member' member_id=id as edit_member %}
-            <a href="{% url 'manage_member' %}" class="nav-link {% if request.path == manage_member %} active {% endif %} {% if request.path == edit_member %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Manage Members
-              </p>
+            {% url 'manage_house' as manage_house %}
+            {% url 'edit_house' house_id=id as edit_house %}
+            <a href="{% url 'manage_house' %}" class="nav-link {% if request.path == manage_house %} active {% endif %} {% if request.path == edit_house %} active {% endif %}">
+              <i class="nav-icon fas fa-building"></i>
+              <p>Manage House</p>
             </a>
           </li>
-          
+
+          <li class="nav-item">
+            {% url 'add_voice' as add_voice %}
+            <a href="{% url 'add_voice' %}" class="nav-link {% if request.path == add_voice %} active {% endif %}">
+              <i class="nav-icon fas fa-microphone"></i>
+              <p>Add Voice</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            {% url 'manage_voice' as manage_voice %}
+            {% url 'edit_voice' voice_id=id as edit_voice %}
+            <a href="{% url 'manage_voice' %}" class="nav-link {% if request.path == manage_voice %} active {% endif %} {% if request.path == edit_voice %} active {% endif %}">
+              <i class="nav-icon fas fa-microphone-alt"></i>
+              <p>Manage Voice</p>
+            </a>
+          </li>
+
           <li class="nav-item">
             {% url 'upload_document_admin' as upload_document_admin %}
             <a href="{{ upload_document_admin }}" class="nav-link {% if request.path == upload_document_admin %} active {% endif %}">
@@ -121,52 +118,57 @@
               <p>View Documents</p>
             </a>
           </li>
-          
-           <li class="nav-item">
-             <a href="{% url 'add_staff' %}" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+
+          <li class="nav-item">
+            <a href="{% url 'add_staff' %}" class="nav-link">
+              <i class="nav-icon fas fa-calendar-check"></i>
               <p>
                 View Attendance
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
-           <li class="nav-item">
+
+          <li class="nav-item">
             <a href="{% url 'add_staff' %}" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-comment-dots"></i>
               <p>
                 Member Feedback
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
-           <li class="nav-item">
+
+          <li class="nav-item">
             <a href="{% url 'add_staff' %}" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-comments"></i>
               <p>
                 Staff Feedback
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
-           <li class="nav-item">
+
+          <li class="nav-item">
             <a href="{% url 'add_staff' %}" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-plane-departure"></i>
               <p>
                 Member Leave
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
-            <li class="nav-item">
+
+          <li class="nav-item">
             <a href="{% url 'add_staff' %}" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-plane"></i>
               <p>
                 Staff Leave
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

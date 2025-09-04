@@ -7,13 +7,61 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from .forms import DocumentForm
 from .models import Document
+from django.db.models import Count
+from collections import defaultdict
 
 from docSys_app.forms import AddMemberForm, EditMemberForm
 from docSys_app.models import CustomUser, Staffs, Houses, Voices, Members
 
 
 def admin_home(request):
-    return render(request,"hod_template/home_content.html")
+    member_count = Members.objects.all().count()
+    staff_count = Staffs.objects.all().count()
+    house_count = Houses.objects.all().count()
+    voice_count = Voices.objects.all().count()
+    document_count = Document.objects.all().count()
+
+    # Members per house
+    house_all = Houses.objects.all()
+    house_name_list = []
+    member_count_list_in_house = []
+    for house in house_all:
+        house_name_list.append(house.house_name)
+        member_count_list_in_house.append(
+            Members.objects.filter(house_id=house.id).count()
+        )
+
+    # Members per voice
+    voice_all = Voices.objects.all()
+    voice_list = []
+    member_count_list_in_voice = []
+    for voice in voice_all:
+        voice_list.append(voice.voice_name)
+        member_count_list_in_voice.append(
+            Members.objects.filter(voice_id=voice.id).count()
+        )
+
+    # Breakdown of voices per house
+    house_voice_breakdown = defaultdict(dict)
+    for house in house_all:
+        for voice in voice_all:
+            count = Members.objects.filter(house_id=house.id, voice_id=voice.id).count()
+            house_voice_breakdown[house.house_name][voice.voice_name] = count
+
+    return render(request, "hod_template/home_content.html", {
+        "member_count": member_count,
+        "staff_count": staff_count,
+        "house_count": house_count,
+        "voice_count": voice_count,
+        "document_count": document_count,
+        "house_name_list": house_name_list,
+        "member_count_list_in_house": member_count_list_in_house,
+        "voice_list": voice_list,
+        "member_count_list_in_voice": member_count_list_in_voice,
+        "house_voice_breakdown": dict(house_voice_breakdown),  # send to template
+    })
+
+
 
 def add_staff(request):
     return render(request,"hod_template/add_staff_template.html")
