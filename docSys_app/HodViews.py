@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from docSys_app.decorators import hod_required
+
 from .forms import DocumentForm
 from .models import Document
 from django.db.models import Count
@@ -13,7 +15,8 @@ from collections import defaultdict
 from docSys_app.forms import AddMemberForm, EditMemberForm
 from docSys_app.models import CustomUser, Staffs, Houses, Voices, Members
 
-
+@login_required
+@hod_required
 def admin_home(request):
     member_count = Members.objects.all().count()
     staff_count = Staffs.objects.all().count()
@@ -62,10 +65,13 @@ def admin_home(request):
     })
 
 
-
+@login_required
+@hod_required
 def add_staff(request):
     return render(request,"hod_template/add_staff_template.html")
 
+@login_required
+@hod_required
 def add_staff_save(request):
     if request.method!="POST":
         return HttpResponse("Method Not Allowed")
@@ -86,9 +92,13 @@ def add_staff_save(request):
             messages.error(request,"Failed to Add Staff")
             return HttpResponseRedirect(reverse("add_staff"))
 
+@login_required
+@hod_required
 def add_house(request):
     return render(request,"hod_template/add_house_template.html")
 
+@login_required
+@hod_required
 def add_house_save(request):
     if request.method!="POST":
         return HttpResponse("Method Not Allowed")
@@ -103,10 +113,14 @@ def add_house_save(request):
             messages.error(request,"Failed To Add House")
             return HttpResponseRedirect(reverse("add_house"))
 
+@login_required
+@hod_required
 def add_member(request):
     form=AddMemberForm()
     return render(request,"hod_template/add_member_template.html",{"form":form})
 
+@login_required
+@hod_required
 def add_member_save(request):
     if request.method != "POST":
         return HttpResponse("Method Not Allowed")
@@ -173,11 +187,13 @@ def add_member_save(request):
             )
 
 
-
+@login_required
+@hod_required
 def add_voice(request):
     return render(request, "hod_template/add_voice_template.html")
 
-
+@login_required
+@hod_required
 def add_voice_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -194,26 +210,39 @@ def add_voice_save(request):
             return HttpResponseRedirect(reverse("add_voice"))
 
 
+@login_required
+@hod_required
 def manage_staff(request):
     staffs=Staffs.objects.all()
     return render(request,"hod_template/manage_staff_template.html",{"staffs":staffs})
 
+@login_required
+@hod_required
 def manage_member(request):
     members=Members.objects.all()
     return render(request,"hod_template/manage_member_template.html",{"members":members})
 
+@login_required
+@hod_required
 def manage_house(request):
     houses=Houses.objects.all()
     return render(request,"hod_template/manage_house_template.html",{"houses":houses})
 
+@login_required
+@hod_required
 def manage_voice(request):
     voices=Voices.objects.all()
     return render(request,"hod_template/manage_voice_template.html",{"voices":voices})
 
+@login_required
+@hod_required
 def edit_staff(request,staff_id):
     staff=Staffs.objects.get(admin=staff_id)
     return render(request,"hod_template/edit_staff_template.html",{"staff":staff,"id":staff_id})
 
+
+@login_required
+@hod_required
 def edit_staff_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -242,6 +271,8 @@ def edit_staff_save(request):
             messages.error(request,"Failed to Edit Staff")
             return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
 
+@login_required
+@hod_required
 def delete_staff(request, staff_id):
     try:
         user = CustomUser.objects.get(id=staff_id)
@@ -261,6 +292,9 @@ def delete_staff(request, staff_id):
     return HttpResponseRedirect(reverse("manage_staff"))
 
 
+
+@login_required
+@hod_required
 def edit_member(request,member_id):
     request.session['member_id']=member_id
     member=Members.objects.get(admin=member_id)
@@ -275,6 +309,9 @@ def edit_member(request,member_id):
     form.fields['session_start'].initial=member.session_start_year
     return render(request,"hod_template/edit_member_template.html",{"form":form,"id":member_id,"username":member.admin.username})
 
+
+@login_required
+@hod_required
 def edit_member_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -345,6 +382,8 @@ def edit_member_save(request):
 
 
 
+@login_required
+@hod_required
 def delete_member(request, member_id):
     try:
         user = CustomUser.objects.get(id=member_id)
@@ -363,11 +402,16 @@ def delete_member(request, member_id):
 
     return HttpResponseRedirect(reverse("manage_member"))
 
+
+@login_required
+@hod_required
 def edit_voice(request, voice_id):
     voice = Voices.objects.get(id=voice_id)
     return render(request, "hod_template/edit_voice_template.html", {"voice": voice, "id": voice_id})
 
 
+@login_required
+@hod_required
 def edit_voice_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -386,7 +430,8 @@ def edit_voice_save(request):
             messages.error(request, f"Failed to Edit Voice: {str(e)}")
             return HttpResponseRedirect(reverse("edit_voice", kwargs={"voice_id": voice_id}))
 
-
+@login_required
+@hod_required
 def delete_voice(request, voice_id):
     try:
         voice = Voices.objects.get(id=voice_id)
@@ -407,10 +452,15 @@ def delete_voice(request, voice_id):
     return HttpResponseRedirect(reverse("manage_voice"))
 
 
+@login_required
+@hod_required
 def edit_house(request,house_id):
     house=Houses.objects.get(id=house_id)
     return render(request,"hod_template/edit_house_template.html",{"house":house,"id":house_id})
 
+
+@login_required
+@hod_required
 def edit_house_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -427,7 +477,9 @@ def edit_house_save(request):
         except:
             messages.error(request,"Failed to Edit House")
             return HttpResponseRedirect(reverse("edit_house",kwargs={"house_id":house_id}))
-        
+
+@login_required
+@hod_required 
 def delete_house(request, house_id):
     try:
         house = Houses.objects.get(id=house_id)
@@ -447,6 +499,7 @@ def delete_house(request, house_id):
     return HttpResponseRedirect(reverse("manage_house"))
 
 @login_required
+@hod_required
 def upload_document_admin(request):
     if request.method == "POST":
         form = DocumentForm(request.POST, request.FILES)
@@ -461,6 +514,7 @@ def upload_document_admin(request):
     return render(request, "hod_template/upload_document_admin.html", {"form": form})
 
 @login_required
+@hod_required
 def admin_view_documents(request):
     documents = Document.objects.all().order_by("-uploaded_at")
     return render(request, "hod_template/admin_view_documents.html", {"documents": documents})
@@ -482,6 +536,8 @@ def admin_edit_document(request, doc_id):
 
 
 # Delete document (Admin)
+@login_required
+@hod_required
 def admin_delete_document(request, doc_id):
     doc = get_object_or_404(Document, id=doc_id)
     try:

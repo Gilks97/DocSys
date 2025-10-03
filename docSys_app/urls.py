@@ -1,3 +1,5 @@
+
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -8,6 +10,7 @@ from . import views
 
 urlpatterns = [
     path('redirect_dashboard/', views.redirect_dashboard, name='redirect_dashboard'),
+
     path('index/', views.index, name='index'),
     path('staff/dashboard/', views.staff_dashboard, name='staff_dashboard'),
     path('member/dashboard/', views.member_dashboard, name='member_dashboard'),
