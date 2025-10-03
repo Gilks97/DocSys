@@ -14,7 +14,7 @@ urlpatterns = [
     path('', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
 
     # Authentication URLs (login, logout, password reset, etc.)
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('registration/', include('django.contrib.auth.urls')),
 
     #  app URLs
     path('', include('docSys_app.urls')),

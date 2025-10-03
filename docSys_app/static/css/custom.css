@@ -1,0 +1,53 @@
+/* 🔹 Sidebar background: dark green with transparency */
+.main-sidebar {
+  background-color: #30383d !important; /* #0c6149 with 90% opacity */
+}
+
+/* 🔹 Sidebar brand (DocSys text) */
+.brand-link {
+  background-color: transparent !important;
+  color: #FFD700 !important; /* gold */
+  font-weight: bold;
+}
+
+/* 🔹 Sidebar nav links */
+.nav-sidebar .nav-link {
+  color: #e6f7ff !important; 
+  transition: background 0.3s, color 0.3s;
+}
+
+/* 🔹 Hover effect */
+.nav-sidebar .nav-link:hover {
+  background-color: rgba(255, 215, 0, 0.2) !important; /* faint gold highlight */
+  color: #ffffff !important;
+}
+
+/* 🔹 Active (selected) menu item */
+.nav-sidebar .nav-link.active {
+  background-color: #465a65 !important; 
+  color: #FFD700 !important; 
+  font-weight: bold;
+}
+
+/* 🔹 Sidebar icons */
+.nav-sidebar .nav-icon {
+  color: #FFD700 !important;
+}
+
+
+
+/* 🔹 Navbar custom theme */
+.main-header.navbar {
+  background-color: #0c6149 !important; /* dark green */
+}
+
+.main-header.navbar .nav-link,
+.main-header.navbar h4,
+.main-header.navbar a {
+  color: #FFD700 !important; /* gold */
+}
+
+.main-header.navbar .nav-link:hover {
+  color: #fff176 !important; /* lighter gold on hover */
+}
+

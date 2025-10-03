@@ -38,9 +38,9 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Auth redirects (optional but nice)
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/registration/login/'
 LOGIN_REDIRECT_URL = '/redirect_dashboard/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGOUT_REDIRECT_URL = '/registration/login/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +50,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Custom middlewares
+    'docSys_app.middleware.LoginRequiredMiddleware',
+    'docSys_app.middleware.RoleRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'docSys.urls'
