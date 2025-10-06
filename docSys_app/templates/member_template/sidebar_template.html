@@ -1,58 +1,72 @@
 {% load static %}
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="" class="brand-link">
-      <img src="{% static "dist/img/doc3.png" %}" 
-          alt="DocSys Logo" 
-          class="brand-image elevation-3"
-          style="width:40px; height:40px; border-radius:50%; object-fit:cover; opacity:.8;">
-      <span class="brand-text font-weight-light">DocSys</span>
-    </a>
+<aside class="main-sidebar sidebar-dark-primary elevation-4 sidebar-bg">
+  <!-- Brand Logo -->
+  <a href="{% url 'member_home' %}" class="brand-link text-center" style="border-bottom: 1px solid rgba(255,215,0,0.2);">
+    <img src="{% static "dist/img/doc3.png" %}" 
+         alt="DocSys Logo" 
+         class="brand-image elevation-3"
+         style="width:45px; height:45px; border-radius:50%; object-fit:cover; border: 2px solid #FFD700;">
+    <span class="brand-text font-weight-light" style="color: #f9f9f5ff; font-size: 1.1em;">DocSys Member</span>
+  </a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- User Panel -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
         <img src="{{ user.members.get_profile_pic }}" 
-            alt="User Image"1
-            style="width:35px; height:35px; border-radius:35%; object-fit:cover;"
-            class="elevation-">
+             alt="User Image"
+             style="width:45px; height:45px; border-radius:50%; object-fit:cover; border: 2px solid #FFD700;">
       </div>
-
-        <div class="info">
-          <a href="#" class="d-block">{{ user.username }}</a>
-        </div>
+      <div class="info">
+        <a href="#" class="d-block" style="color: #f9f9f5ff; font-weight: 600;">{{ user.first_name }}</a>
+        <small style="color: rgba(255,215,0,0.8);">
+          <i class="fas fa-circle text-success mr-1" style="font-size: 0.7em;"></i> Online
+        </small>
       </div>
-
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            {% url 'member_home' as member_home %}
-            <a href="{{ member_home }}" class="nav-link {% if request.path == member_home %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Home
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            {% url 'member_view_documents' as member_view_documents %}
-            <a href="{{ member_view_documents }}" class="nav-link {% if request.path == member_view_documents %} active {% endif %}">
-              <i class="nav-icon fas fa-file-alt"></i>
-              <p>View Documents</p>
-            </a>
-          </li>
-
-
-
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
-  </aside>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+        <!-- Dashboard -->
+        <li class="nav-item">
+          <a href="{% url 'member_home' %}" class="nav-link {% if request.path == '/member_home' %} active {% endif %}" 
+             style="{% if request.path == '/member_home' %} background-color: rgba(255,215,0,0.2); border-left: 4px solid #FFD700; {% endif %}">
+            <i class="nav-icon fas fa-tachometer-alt text-gold"></i>
+            <p style="font-weight: 600; color: #f9f9f5ff;">Dashboard</p>
+          </a>
+        </li>
+
+        <!-- Documents -->
+        <li class="nav-item">
+          <a href="{% url 'member_view_documents' %}" class="nav-link {% if request.path == '/member/view_documents/' %} active {% endif %}"
+             style="{% if request.path == '/member/view_documents/' %} background-color: rgba(255,215,0,0.2); border-left: 4px solid #FFD700; {% endif %}">
+            <i class="nav-icon fas fa-file-alt text-gold"></i>
+            <p style="font-weight: 600; color: #f9f9f5ff;">Document Library</p>
+          </a>
+        </li>
+
+        <!-- Divider -->
+        <li class="nav-header mt-3" style="color: rgba(255,215,0,0.6); font-size: 0.8em;">ACCOUNT</li>
+
+        <!-- Profile -->
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-user-cog text-gold"></i>
+            <p style="color: #f9f9f5ff;">My Profile</p>
+          </a>
+        </li>
+
+        <!-- Settings -->
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-cog text-gold"></i>
+            <p style="color: #f9f9f5ff;">Settings</p>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</aside>

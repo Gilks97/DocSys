@@ -1,0 +1,84 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}Staff Member Dashboard{% endblock %}
+
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        
+        <!-- Welcome Alert -->
+        <div class="alert alert-info">
+            <h4><i class="fas fa-user-check"></i> Welcome, Staff Member!</h4>
+            <p>You have access to both <strong class="text-warning">Staff Privileges</strong> and <strong class="text-warning">Member Features</strong>.</p>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="row">
+            <!-- Staff Upload -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3><i class="fas fa-upload"></i></h3>
+                        <p>Upload Documents</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <a href="{% url 'upload_document_staff' %}" class="small-box-footer">
+                        Go <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Staff Manage -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3><i class="fas fa-cog"></i></h3>
+                        <p>Manage Documents</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <a href="{% url 'staff_view_documents' %}" class="small-box-footer">
+                        Go <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Member Browse -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3><i class="fas fa-search"></i></h3>
+                        <p>Browse Documents</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <!--  Change to staff member version -->
+                    <a href="{% url 'staff_member_view_documents' %}" class="small-box-footer">
+                        Go <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3><i class="fas fa-user"></i></h3>
+                        <p>My Profile</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <a href="{% url 'staff_profile' %}" class="small-box-footer">
+                        Go <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

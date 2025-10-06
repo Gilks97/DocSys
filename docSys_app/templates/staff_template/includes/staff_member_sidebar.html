@@ -1,0 +1,65 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="{% url 'staff_home' %}" class="brand-link text-center">
+        <span class="brand-text font-weight-light">
+            <i class="fas fa-user-check"></i> Staff Member
+        </span>
+    </a>
+
+    <div class="sidebar">
+        <!-- User Panel -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{{ user.members.get_profile_pic }}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ user.first_name }} {{ user.last_name }}</a>
+                <small class="text-warning"><i class="fas fa-user-check"></i> Staff Member</small>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
+                <!--  STAFF DASHBOARD LINK (Always visible) -->
+                <li class="nav-item">
+                    <a href="{% url 'staff_home' %}" class="nav-link bg-secondary">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p><strong>Staff Dashboard</strong></p>
+                    </a>
+                </li>
+
+                <!-- Staff Section -->
+                <li class="nav-header text-uppercase text-sm text-warning">Staff Privileges</li>
+                <li class="nav-item">
+                    <a href="{% url 'upload_document_staff' %}" class="nav-link">
+                        <i class="nav-icon fas fa-upload"></i>
+                        <p>Upload Documents</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'staff_view_documents' %}" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Manage Documents</p>
+                    </a>
+                </li>
+
+                <!-- Member Section -->
+                <li class="nav-item">
+                    <a href="{% url 'staff_member_view_documents' %}" class="nav-link">
+                        <i class="nav-icon fas fa-search"></i>
+                        <p>Browse Documents</p>
+                    </a>
+                </li>
+
+                <!-- Profile -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>My Profile</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

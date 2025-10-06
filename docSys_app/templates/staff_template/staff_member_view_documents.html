@@ -1,0 +1,96 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}Browse Documents - Staff Member{% endblock %}
+
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        
+        <!--   NAVIGATION HEADER -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="callout callout-info">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5><i class="fas fa-search"></i> Browse Documents</h5>
+                            <p class="mb-0">You are viewing documents as a member. Use staff features to upload or manage documents.</p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <a href="{% url 'staff_home' %}" class="btn btn-warning btn-lg">
+                                <i class="fas fa-arrow-left"></i> Back to Staff Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--   QUICK ACTION BUTTONS -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="btn-group">
+                            <a href="{% url 'upload_document_staff' %}" class="btn btn-success">
+                                <i class="fas fa-upload"></i> Upload New Document
+                            </a>
+                            <a href="{% url 'staff_view_documents' %}" class="btn btn-primary">
+                                <i class="fas fa-cog"></i> Manage Documents
+                            </a>
+                            <a href="{% url 'staff_home' %}" class="btn btn-warning">
+                                <i class="fas fa-tachometer-alt"></i> Staff Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCUMENTS CONTENT (Copy from your member_view_documents.html) -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All Documents</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Uploaded By</th>
+                                        <th>Date Uploaded</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for document in documents %}
+                                    <tr>
+                                        <td>{{ document.title }}</td>
+                                        <td>{{ document.uploaded_by.username }}</td>
+                                        <td>{{ document.uploaded_at|date:"M d, Y H:i" }}</td>
+                                        <td>
+                                            <a href="{{ document.file.url }}" class="btn btn-primary btn-sm" target="_blank">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center">No documents found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

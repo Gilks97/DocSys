@@ -1,34 +1,102 @@
 {% extends 'member_template/base_template.html' %}
-{% block page_title %}View Documents{% endblock page_title %}
+{% block page_title %}Document Library{% endblock page_title %}
 
 {% block main_content %}
 <section class="content">
   <div class="container-fluid">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">All Documents</h3>
-      </div>
-      <div class="card-body">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Download</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for doc in documents %}
-            <tr>
-              <td>{{ doc.title }}</td>
-              <td><a href="{{ doc.file.url }}" class="btn btn-sm btn-success" download><i class="fas fa-download"></i> Download</a></td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="4">No documents uploaded yet.</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    
+    <!-- Page Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card" style="background: #ffffff; border-left: 4px solid #FFD700;">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-8">
+                <h4 style="color: #5d4037;"><i class="fas fa-book-open mr-2" style="color: #656769ff;"></i>Document Library</h4>
+                <p class="mb-0" style="color: #656769ff;">Browse and download available documents.</p>
+              </div>
+              <div class="col-md-4 text-right">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search documents..." style="border: 1px solid #e0e0e0;">
+                  <div class="input-group-append">
+                    <button class="btn gold-btn" type="button">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Documents Table -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card feature-card document-table">
+          <div class="card-header primary-solid" style="color: white;">
+            <h3 class="card-title mb-0"><i class="fas fa-file-alt mr-2 text-gold"></i>Available Documents</h3>
+            <div class="card-tools">
+              <span class="badge gold-btn">{{ documents.count }} documents</span>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead style="background: #656769ff; color: white;">
+                  <tr>
+                    <th style="width: 60%;">
+                      <i class="fas fa-file-signature mr-2 text-gold"></i>Document Title
+                    </th>
+                    <th style="width: 25%;">
+                      <i class="fas fa-calendar mr-2 text-gold"></i>Upload Date
+                    </th>
+                    <th style="width: 15%;" class="text-center">
+                      <i class="fas fa-download mr-2 text-gold"></i>Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for doc in documents %}
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <i class="fas fa-file-pdf mr-3 fa-lg" style="color: #8d6e63;"></i>
+                        <div>
+                          <h6 class="mb-0" style="color: #5d4037;">{{ doc.title }}</h6>
+                        </div>
+                      </div>
+                    </td> 
+                    
+                    <td>
+                      <span class="badge" style="background: #e0e0e0; color: #5d4037;">
+                        {{ doc.uploaded_at|date:"M d, Y" }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <a href="{{ doc.file.url }}" class="btn gold-btn btn-sm" download>
+                        <i class="fas fa-download mr-1"></i> Download
+                      </a>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="3" class="text-center py-4">
+                      <i class="fas fa-folder-open fa-3x mb-3" style="color: #8d6e63;"></i>
+                      <h5 style="color: #5d4037;">No documents available</h5>
+                      <p class="text-muted">Check back later for new uploads.</p>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 {% endblock main_content %}

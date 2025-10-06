@@ -4,126 +4,155 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Document Management System |  Member Panel</title>
-  <!-- Tell the browser to be responsive to screen width -->
+  <title>DocSys | Member Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{% static "plugins/fontawesome-free/css/all.min.css" %}">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bbootstrap 4 -->
-  <link rel="stylesheet" href="{% static "plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" %}">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{% static "plugins/icheck-bootstrap/icheck-bootstrap.min.css" %}">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="{% static "plugins/jqvmap/jqvmap.min.css" %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static "dist/css/adminlte.min.css" %}">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{% static "plugins/overlayScrollbars/css/OverlayScrollbars.min.css" %}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{% static "plugins/daterangepicker/daterangepicker.css" %}">
-  <!-- summernote -->
-  <link rel="stylesheet" href="{% static "plugins/summernote/summernote-bs4.css" %}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
-  <!-- My custom css overrides -->
-  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    {% block custom_css %}{% endblock custom_css %}
+  <!-- Custom Member CSS -->
+  <style>
+    .primary-dark { background-color: rgba(1, 80, 48, 0.9) !important; }
+    .primary-solid { background-color: #015030 !important; }
+    .accent-gold { background-color: #FFD700 !important; color: #000 !important; }
+    .text-gold { color: #FFD700 !important; }
+    .text-primary-dark { color: #015030 !important; }
+    
+    .sidebar-bg { background-color: #30383d !important; }
+    
+    .welcome-card {
+      background: linear-gradient(135deg, #5f5b5aff 0%, #1e9267ff 100%);
+      color: white;
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 4px 15px rgba(22, 101, 60, 0.3);
+    }
+    
+    .feature-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: #f8f9fa;
+      border-left: 4px solid #289482ff;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    .document-table {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .user-welcome {
+      background: linear-gradient(135deg, #a1887f 0%, #8d6e63 100%);
+      border-radius: 10px;
+      color: white;
+    }
+    
+    .gold-btn {
+      background: linear-gradient(135deg, #FFD700 0%, #FFC400 100%);
+      color: #000;
+      font-weight: 600;
+      border: none;
+    }
+    
+    .gold-btn:hover {
+      background: linear-gradient(135deg, #FFC400 0%, #FFB300 100%);
+      color: #000;
+    }
+  </style>
+  
+  {% block custom_css %}{% endblock custom_css %}
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light primary-dark" style="border-bottom: 3px solid #FFD700;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars text-gold"></i></a>
       </li>
     </ul>
-    <h4 style="margin-left: 10px;margin-top: 5px;">Document Management Sytem | Member Panel</h4>
+    
+    <h4 style="margin-left: 10px; margin-top: 5px; color: #FFD700; font-weight: 600;">
+      <i class="fas fa-file-alt mr-2"></i>DocSys Member Portal
+    </h4>
+    
     <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
+      <!-- User Info -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="fas fa-user-circle text-gold" style="font-size: 1.5em;"></i>
+          <span class="badge gold-btn ml-1" style="color: #000;">Member</span>
+        </a>
+      </li>
+      <!-- Logout -->
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">
-          Logout
+        <a class="nav-link text-gold" href="{% url 'logout' %}">
+          <i class="fas fa-sign-out-alt"></i> Logout
         </a>
       </li>
     </ul>
-
-    <!-- Right navbar links -->
   </nav>
-  <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-    {% include 'member_template/sidebar_template.html' with user=user id=id %}
+  {% include 'member_template/sidebar_template.html' with user=user id=id %}
 
-  <!-- Content Wrapper. Contains page content -->
-   <div class="content-wrapper">
-       <!-- Content Header (Page header) -->
+  <!-- Content Wrapper -->
+  <div class="content-wrapper" style="background-color: #f5f5f5;">
+    <!-- Content Header -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">
-                {% block page_title %}
-                {% endblock page_title %}
+            <h1 class="m-0 text-dark" style="font-weight: 700; color: #5d4037;">
+              {% block page_title %}
+              {% endblock page_title %}
             </h1>
-          </div><!-- /.col -->
+          </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{% url 'admin_home' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'member_home' %}" style="color: #8d6e63;">Home</a></li>
+              {% block breadcrumb_extra %}{% endblock breadcrumb_extra %}
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.content-header -->
-     {% block main_content %}{% endblock main_content %}
 
+    <!-- Success Messages -->
+    {% if messages %}
+    <div class="container-fluid">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" style="border-radius: 10px; border-left: 4px solid #FFD700;">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>{{ message }}</strong>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% block main_content %}{% endblock main_content %}
   </div>
-  <!-- /.content-wrapper -->
-    {% include 'staff_template/footer.html' %}
 
+  {% include 'staff_template/footer.html' %}
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery -->
+<!-- Scripts -->
 <script src="{% static "plugins/jquery/jquery.min.js" %}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{% static "plugins/jquery-ui/jquery-ui.min.js" %}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
 <script src="{% static "plugins/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
-<!-- ChartJS -->
-<script src="{% static "plugins/chart.js/Chart.min.js" %}"></script>
-<!-- Sparkline -->
-<script src="{% static "plugins/sparklines/sparkline.js" %}"></script>
-<!-- JQVMap -->
-<script src="{% static "plugins/jqvmap/jquery.vmap.min.js" %}"></script>
-<script src="{% static "plugins/jqvmap/maps/jquery.vmap.usa.js" %}"></script>
-<!-- jQuery Knob Chart -->
-<script src="{% static "plugins/jquery-knob/jquery.knob.min.js" %}"></script>
-<!-- daterangepicker -->
-<script src="{% static "plugins/moment/moment.min.js" %}"></script>
-<script src="{% static "plugins/daterangepicker/daterangepicker.js" %}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="{% static "plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" %}"></script>
-<!-- Summernote -->
-<script src="{% static "plugins/summernote/summernote-bs4.min.js" %}"></script>
-<!-- overlayScrollbars -->
-<script src="{% static "plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" %}"></script>
-<!-- AdminLTE App -->
 <script src="{% static "dist/js/adminlte.js" %}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{% static "dist/js/pages/dashboard.js" %}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{% static "dist/js/demo.js" %}"></script>
 
 {% block custom_js %}
 {% endblock custom_js %}

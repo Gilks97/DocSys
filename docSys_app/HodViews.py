@@ -213,8 +213,18 @@ def add_voice_save(request):
 @login_required
 @hod_required
 def manage_staff(request):
-    staffs=Staffs.objects.all()
-    return render(request,"hod_template/manage_staff_template.html",{"staffs":staffs})
+    """Manage ALL staff - both regular staff and staff members"""
+    # Regular staff (user_type=2)
+    regular_staff = Staffs.objects.all()
+    
+    # Members with staff privileges
+    staff_members = Members.objects.filter(has_staff_privileges=True).select_related('admin')
+    
+    return render(request, "hod_template/manage_staff_template.html", {
+        "regular_staff": regular_staff,
+        "staff_members": staff_members,
+    })
+
 
 @login_required
 @hod_required
@@ -233,6 +243,8 @@ def manage_house(request):
 def manage_voice(request):
     voices=Voices.objects.all()
     return render(request,"hod_template/manage_voice_template.html",{"voices":voices})
+
+
 
 @login_required
 @hod_required
@@ -292,6 +304,65 @@ def delete_staff(request, staff_id):
     return HttpResponseRedirect(reverse("manage_staff"))
 
 
+@login_required
+@hod_required
+def grant_staff_privileges(request, member_id):
+    """Grant staff privileges to a member"""
+    try:
+        member = Members.objects.get(admin_id=member_id)
+        
+        if member.has_staff_privileges:
+            messages.warning(request, f"{member.admin.username} already has staff privileges")
+        else:
+            member.grant_staff_privileges()
+            messages.success(request, f"✅ {member.admin.username} is now a Staff Member")
+            
+    except Members.DoesNotExist:
+        messages.error(request, "Member not found")
+    except Exception as e:
+        messages.error(request, f"Failed to grant staff privileges: {str(e)}")
+    
+    return HttpResponseRedirect(reverse("manage_member"))
+
+@login_required
+@hod_required
+def revoke_staff_privileges(request, member_id):
+    """Revoke staff privileges from a member"""
+    try:
+        member = Members.objects.get(admin_id=member_id)
+        
+        if not member.has_staff_privileges:
+            messages.warning(request, f"{member.admin.username} doesn't have staff privileges")
+        else:
+            member.revoke_staff_privileges()
+            messages.success(request, f"❌ Removed staff privileges from {member.admin.username}")
+            
+    except Members.DoesNotExist:
+        messages.error(request, "Member not found")
+    except Exception as e:
+        messages.error(request, f"Failed to revoke staff privileges: {str(e)}")
+    
+    return HttpResponseRedirect(reverse("manage_staff"))
+
+@login_required
+@hod_required
+def revoke_staff_privileges(request, member_id):
+    """Revoke staff privileges from a member"""
+    try:
+        member = Members.objects.get(admin_id=member_id)
+        
+        if not member.has_staff_privileges:
+            messages.warning(request, f"{member.admin.username} doesn't have staff privileges")
+        else:
+            member.revoke_staff_privileges()
+            messages.success(request, f"❌ Removed staff privileges from {member.admin.username}")
+            
+    except Members.DoesNotExist:
+        messages.error(request, "Member not found")
+    except Exception as e:
+        messages.error(request, f"Failed to revoke staff privileges: {str(e)}")
+    
+    return HttpResponseRedirect(reverse("manage_staff"))
 
 @login_required
 @hod_required

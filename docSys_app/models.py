@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Create your models here.
+
 class CustomUser(AbstractUser):
     user_type_data=((1,"HOD"),(2,"Staff"),(3,"Members"))
     user_type=models.IntegerField(default=1,choices=user_type_data)
@@ -50,6 +50,7 @@ class Members(models.Model):
     house_id=models.ForeignKey(Houses, on_delete=models.SET_NULL, null=True, blank=True)
     voice_id=models.ForeignKey(Voices, on_delete=models.SET_NULL, null=True, blank=True)
     session_start_year=models.DateField()
+    has_staff_privileges = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
@@ -62,6 +63,16 @@ class Members(models.Model):
         if self.profile_pic:
             return self.profile_pic.url
         return "/static/dist/img/default_profile.jpg"   # change to the chosen default
+    
+    def grant_staff_privileges(self):
+        """Grant staff privileges to this member"""
+        self.has_staff_privileges = True
+        self.save()
+
+    def revoke_staff_privileges(self):
+        """Revoke staff privileges from this member"""
+        self.has_staff_privileges = False
+        self.save()
 
 class Attendance(models.Model):
     id=models.AutoField(primary_key=True)

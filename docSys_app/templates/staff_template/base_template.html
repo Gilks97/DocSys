@@ -4,7 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Document Management System |  Staff Panel</title>
+  <title>
+    {% if is_staff_member %}
+      Document Management System | Staff Member Panel
+    {% else %}
+      Document Management System | Staff Panel
+    {% endif %}
+  </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -31,7 +37,7 @@
   <!-- My custom css overrides -->
   <link rel="stylesheet" href="{% static 'css/custom.css' %}">
   
-    {% block custom_css %}{% endblock custom_css %}
+  {% block custom_css %}{% endblock custom_css %}
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -44,22 +50,43 @@
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
     </ul>
-    <h4 style="margin-left: 10px;margin-top: 5px;">Document Management Sytem | Staff Panel</h4>
+    <h4 style="margin-left: 10px;margin-top: 5px;">
+      {% if is_staff_member %}
+        Document Management System | Staff Member Panel
+      {% else %}
+        Document Management System | Staff Panel
+      {% endif %}
+    </h4>
     <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
+      <!-- User Info -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="fas fa-user"></i>
+          {% if is_staff_member %}
+            <span class="badge badge-warning">Staff Member</span>
+          {% else %}
+            <span class="badge badge-primary">Staff</span>
+          {% endif %}
+        </a>
+      </li>
+      <!-- Logout -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}">
-          Logout
+          <i class="fas fa-sign-out-alt"></i> Logout
         </a>
       </li>
     </ul>
-
-    <!-- Right navbar links -->
   </nav>
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
+  {% if is_staff_member %}
+    <!--   Staff Member Sidebar -->
+    {% include 'staff_template/includes/staff_member_sidebar.html' %}
+  {% else %}
+    <!-- Regular Staff Sidebar -->
     {% include 'staff_template/sidebar_template.html' with user=user id=id %}
+  {% endif %}
 
   <!-- Content Wrapper. Contains page content -->
    <div class="content-wrapper">
@@ -75,13 +102,33 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{% url 'admin_home' %}">Home</a></li>
+              <li class="breadcrumb-item">
+                {% if is_staff_member %}
+                  <a href="{% url 'staff_home' %}">Staff Member Home</a>
+                {% else %}
+                  <a href="{% url 'staff_home' %}">Staff Home</a>
+                {% endif %}
+              </li>
+              {% block breadcrumb_extra %}{% endblock breadcrumb_extra %}
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    
+    <!--   Success Message Display -->
+    {% if messages %}
+    <div class="container-fluid">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>{{ message }}</strong>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    
      {% block main_content %}{% endblock main_content %}
 
   </div>

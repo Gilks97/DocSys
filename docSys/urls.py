@@ -35,6 +35,8 @@ urlpatterns = [
     path('edit_staff/<str:staff_id>', HodViews.edit_staff,name="edit_staff"),
     path('edit_staff_save', HodViews.edit_staff_save,name="edit_staff_save"),
     path("delete_staff/<int:staff_id>/", HodViews.delete_staff, name="delete_staff"),
+    path('grant_staff_privileges/<int:member_id>/', HodViews.grant_staff_privileges, name='grant_staff_privileges'),
+    path('revoke_staff_privileges/<int:member_id>/', HodViews.revoke_staff_privileges, name='revoke_staff_privileges'),
     path('edit_member/<str:member_id>', HodViews.edit_member,name="edit_member"),
     path('edit_member_save', HodViews.edit_member_save,name="edit_member_save"),
     path("delete_member/<int:member_id>/", HodViews.delete_member, name="delete_member"),
@@ -59,6 +61,8 @@ urlpatterns = [
     path("staff/view_documents/", StaffViews.staff_view_documents, name="staff_view_documents"),
     path("staff/documents/edit/<int:doc_id>/", StaffViews.staff_edit_document, name="staff_edit_document"),
     path("staff/documents/delete/<int:doc_id>/", StaffViews.staff_delete_document, name="staff_delete_document"),
+    # Staff Member specific views
+    path('staff/member_documents/', StaffViews.staff_member_view_documents, name='staff_member_view_documents'),
 
 
 

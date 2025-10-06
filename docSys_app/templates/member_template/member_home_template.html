@@ -1,12 +1,147 @@
 {% extends 'member_template/base_template.html' %}
 {% block page_title %}
-Home
+Member Dashboard
 {% endblock page_title %}
+
 {% block main_content %}
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
+<section class="content">
+  <div class="container-fluid">
+    
+    <!-- Welcome Section -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card welcome-card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-8">
+                <h3><i class="fas fa-user mr-2 text-gold"></i>Welcome back, {{ user.first_name }}!</h3>
+                <p class="mb-0" style="color: rgba(255,255,255,0.9);">Access your documents and manage your profile from your member dashboard.</p>
+              </div>
+
+              <div class="col-md-4 text-right">
+                  <div class="user-welcome p-2.5 text-center" style="background: linear-gradient(135deg, #303538ff 0%, #656769ff 100%);">
+                      <i class="fas fa-user-circle fa-x mb-0.3 text-gold"></i>
+                      <h5 class="mb-0 text-gold">{{ user.username }}</h5>
+                      <small class="text-gold">Member Account</small>
+                  </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
-    <!-- /.content -->
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mt-4">
+      <div class="col-lg-3 col-6">
+        <div class="small-box feature-card" style="background: #ffffff;">
+          <div class="inner">
+            <h3 style="color: #074e34ff;">Documents</h3>
+            <p style="color: #074e34ff;">Browse & Download</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-file-alt" style="color: #99b3aeff;"></i>
+          </div>
+          <a href="{% url 'member_view_documents' %}" class="small-box-footer" style="color: #289482ff;">
+            View Documents <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="col-lg-3 col-6">
+        <div class="small-box feature-card" style="background: #ffffff;">
+          <div class="inner">
+            <h3 style="color: #074e34ff;">Library</h3>
+            <p style="color: #074e34ff;">Document Archive</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-book-open" style="color: #99b3aeff;"></i>
+          </div>
+          <a href="{% url 'member_view_documents' %}" class="small-box-footer" style="color: #289482ff;">
+            Explore <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-6">
+        <div class="small-box feature-card" style="background: #ffffff;">
+          <div class="inner">
+            <h3 style="color: #074e34ff;">Profile</h3>
+            <p style="color: #074e34ff;">Account Settings</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-user-cog" style="color: #99b3aeff;"></i>
+          </div>
+          <a href="#" class="small-box-footer" style="color: #289482ff;">
+            Manage <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-6">
+        <div class="small-box feature-card" style="background: #ffffff;">
+          <div class="inner">
+            <h3 style="color: #074e34ff;">Support</h3>
+            <p style="color: #074e34ff;">Get Help</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-headset" style="color: #99b3aeff;"></i>
+          </div>
+          <a href="#" class="small-box-footer" style="color: #289482ff;">
+            Contact <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card feature-card">
+          <div class="card-header" style="background: #ffffff; border-bottom: 2px solid #FFD700;">
+            <h3 class="card-title" style="color: #074e34ff;"><i class="fas fa-history mr-2" style="color: #074e34ff;"></i>Recent Activity</h3>
+          </div>
+          <div class="card-body">
+            <div class="list-group">
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1" style="color: #074e34ff;">Document Accessed</h6>
+                  <small style="color: #074e34ff;">2 hours ago</small>
+                </div>
+                <p class="mb-1" style="color: #074e34ff;">Course Materials.pdf</p>
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1" style="color: #074e34ff;">Profile Updated</h6>
+                  <small style="color: #074e34ff;">1 day ago</small>
+                </div>
+                <p class="mb-1" style="color: #074e34ff;">Updated contact information</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card feature-card">
+          <div class="card-header" style="background: #ffffff; border-bottom: 2px solid #FFD700;">
+            <h3 class="card-title" style="color: #074e34ff;"><i class="fas fa-bullhorn mr-2" style="color: #074e34ff;"></i>Announcements</h3>
+          </div>
+          <div class="card-body">
+            <div class="alert" style="background: #f8f9fa; border-left: 4px solid #8d6e63;">
+              <h6 style="color: #074e34ff;"><i class="fas fa-info-circle mr-2" style="color: #074e34ff;"></i>System Maintenance</h6>
+              <p class="mb-0" style="color: #1e9267ff;">Scheduled maintenance on Saturday, 8 PM - 10 PM.</p>
+            </div>
+            <div class="alert" style="background: #f8f9fa; border-left: 4px solid #FFD700;">
+              <h6 style="color: #074e34ff;"><i class="fas fa-check-circle mr-2 style="color: #074e34ff;"></i>New Documents Added</h6>
+              <p class="mb-0" style="color: #1e9267ff;">Check out the latest course materials in the documents section.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 {% endblock main_content %}
