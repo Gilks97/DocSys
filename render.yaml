@@ -1,3 +1,4 @@
+
 services:
   - type: web
     name: docsys-app
@@ -23,4 +24,4 @@ databases:
     plan: free
     databaseName: docsys
     user: docsys_user
-
+EOF
