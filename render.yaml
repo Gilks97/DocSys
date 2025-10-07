@@ -4,8 +4,7 @@ services:
     name: docsys-app
     env: docker
     plan: free
-    docker:
-      dockerfile: Dockerfile
+    dockerfile: Dockerfile
     envVars:
       - key: DATABASE_URL
         fromDatabase:
