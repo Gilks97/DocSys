@@ -25,4 +25,6 @@ USER django
 
 EXPOSE $PORT
 
+RUN python manage.py check
+
 CMD gunicorn docSys.wsgi:application --bind 0.0.0.0:$PORT --workers 3
