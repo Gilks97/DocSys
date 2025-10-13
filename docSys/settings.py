@@ -137,10 +137,8 @@ STATICFILES_DIRS = [
 ]
 
 # Use Whitenoise to serve compressed static files in production
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-# Allow WhiteNoise to ignore missing files during collectstatic
-WHITENOISE_IGNORE_MISSING_FILES = True
 
 
 # Default primary key field type
