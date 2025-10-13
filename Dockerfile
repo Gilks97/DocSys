@@ -27,4 +27,15 @@ EXPOSE $PORT
 
 RUN python manage.py check
 
-CMD gunicorn docSys.wsgi:application --bind 0.0.0.0:$PORT --workers 3
+CMD bash -c "
+python manage.py migrate --noinput &&
+python manage.py collectstatic --noinput &&
+python manage.py shell -c \"from django.contrib.auth import get_user_model; \
+User=get_user_model(); \
+username='admin'; \
+email='admin@gmail.com'; \
+password='admin098'; \
+User.objects.filter(username=username).exists() or \
+User.objects.create_superuser(username, email, password)\" &&
+gunicorn docSys.wsgi:application --bind 0.0.0.0:\$PORT --workers 3
+"
