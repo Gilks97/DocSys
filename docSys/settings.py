@@ -130,11 +130,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for collected static files in production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Tell Django where to find your app’s static files before collectstatic runs
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'docSys_app', 'static'),
+    os.path.join(BASE_DIR, 'docSys_app/static'),
 ]
 
 # Use Whitenoise to serve compressed static files in production
