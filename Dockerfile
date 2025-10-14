@@ -1,34 +1,63 @@
+# ===============================
+# 1 Use an official Python image
+# ===============================
 FROM python:3.10-slim
 
+# Prevent Python from writing pyc files and buffer issues
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8000
 
+# Render automatically sets PORT=10000
+ENV PORT=10000
+
+# ===============================
+# 2 Set working directory
+# ===============================
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
+# ===============================
+# 3 Install system dependencies
+# ===============================
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# ===============================
+# 4 Install Python dependencies
+# ===============================
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir --timeout=120 --retries=5 -r requirements.txt
 
+# ===============================
+# 5 Copy project files
+# ===============================
 COPY . .
 
-# Create static directory
-RUN mkdir -p static
+# ===============================
+# 6 Collect static files
+# ===============================
+RUN python manage.py collectstatic --noinput
 
-# Copy and set permission for entrypoint BEFORE switching to non-root user
+# ===============================
+# 7 Add entrypoint script
+# ===============================
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Create a non-root user
+# ===============================
+# 8 Create a non-root user
+# ===============================
 RUN useradd -m -r django && chown -R django /app /entrypoint.sh
 USER django
 
-# Expose the port Render expects
+# ===============================
+# 9 Expose the Render port
+# ===============================
 EXPOSE $PORT
 
-# Use entrypoint script
+# ===============================
+# 10 Set the entrypoint
+# ===============================
 ENTRYPOINT ["/entrypoint.sh"]
