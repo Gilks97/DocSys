@@ -136,8 +136,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'docSys_app/static'),
 ]
 
-# Use Whitenoise to serve compressed static files in production
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+#STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 
