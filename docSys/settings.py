@@ -137,12 +137,7 @@ STATICFILES_DIRS = [
 ]
 
 # Use Whitenoise to serve compressed static files in production
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-WHITENOISE_IGNORE_MISSING_FILES = True
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 
