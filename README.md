@@ -2,6 +2,7 @@
 
 DocSys is a role-based Django web application designed to manage and organize documents efficiently across different user levels — Admin (HOD), Staff, Staff-Member, and Members. Each user type has unique permissions, and the system ensures secure access and document handling through authentication and authorization.
 
+
 🚀 Features
 🔐 Authentication & Security
 
@@ -13,6 +14,7 @@ Access control for dashboards and features per role
 
 Secure file upload and management
 
+
 👨‍💼 Admin (HOD)
 
 Add, edit, delete staff, staff-members, members, houses, and voices
@@ -23,6 +25,7 @@ View and manage all uploaded documents
 
 Dashboard with statistical summaries using Chart.js
 
+
 👩‍🏫 Staff
 
 Upload documents for review
@@ -30,6 +33,7 @@ Upload documents for review
 View and manage personal documents
 
 Update profile information
+
 
 👩‍🏫 Staff-Member
 
@@ -43,6 +47,7 @@ View and manage personal documents
 
 Update profile information
 
+
 👨‍🎓 Member
 
 View documents shared by admin or staff
@@ -50,6 +55,7 @@ View documents shared by admin or staff
 Limited access based on role
 
 Personal dashboard
+
 
 📊 Dashboard & Analytics
 
@@ -60,6 +66,7 @@ Total members, staff, houses, and voices
 Voice distribution per house (using Chart.js)
 
 Interactive hover tooltips for more detailed info
+
 
 🧱 Tech Stack
 
