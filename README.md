@@ -1,7 +1,6 @@
 📄 DocSys – Document Management System
 
-DocSys is a role-based Django web application designed to manage and organize documents efficiently across different user levels — Admin (HOD), Staff, Staff-Member, and Members.
-Each user type has unique permissions, and the system ensures secure access and document handling through authentication and authorization.
+DocSys is a role-based Django web application designed to manage and organize documents efficiently across different user levels — Admin (HOD), Staff, Staff-Member, and Members. Each user type has unique permissions, and the system ensures secure access and document handling through authentication and authorization.
 
 🚀 Features
 🔐 Authentication & Security
@@ -63,6 +62,7 @@ Voice distribution per house (using Chart.js)
 Interactive hover tooltips for more detailed info
 
 🧱 Tech Stack
+
 Layer	Technologies Used
 
 Frontend:	HTML5, CSS3, Bootstrap, AdminLTE, Chart.js, JavaScript
@@ -75,6 +75,7 @@ Authentication:	Django’s built-in User model with custom roles
 
 Other Tools:	jQuery, Font Awesome, Ionicons
 
+
 🛡️ Security Enhancements
 
 Middleware restricts direct URL access (must login)
@@ -85,59 +86,7 @@ File uploads sanitized and stored securely
 
 Uses Django CSRF protection by default
 
-📁 Project Structure
-docSys/
-│
-├── docSys/                          # Main project folder
-│   ├── settings.py                  # Project settings and configuration
-│   ├── urls.py                      # Root URL routing
-│   ├── middleware.py                # Custom authentication middleware
-│   └── wsgi.py                      # WSGI configuration for deployment
-│
-├── docSys_app/                      # Main application
-│   ├── models.py                    # Database models (User, Document, etc.)
-│   ├── views.py                     # Base views and utilities
-│   ├── HodViews.py                  # Admin/HOD specific views
-│   ├── StaffViews.py                # Staff-specific views
-│   ├── MemberViews.py               # Member-specific views
-│   ├── decorators.py                # Role-based access decorators
-│   ├── urls.py                      # App-specific URL routing
-│   └── utils.py                     # Utility functions and helpers
-│
-├── templates/                       # Django templates
-│   ├── base.html                    # Base template structure
-│   ├── registration/                # Auth templates (login, logout)
-│   ├── hod_template/                # Admin templates
-│   │   ├── admin_dashboard.html     # Admin main dashboard
-│   │   ├── manage_users.html        # User management
-│   │   └── analytics.html           # Charts and reports
-│   ├── staff_template/              # Staff templates
-│   └── member_template/             # Member templates
-│
-├── static/                          # Static assets
-│   ├── css/
-│   │   ├── custom.css               # Custom styling overrides
-│   │   └── dashboard.css            # Dashboard-specific styles
-│   ├── js/
-│   │   ├── charts.js                # Chart.js configurations
-│   │   └── custom.js                # Custom JavaScript
-│   ├── dist/                        # AdminLTE compiled assets
-│   ├── plugins/                     # jQuery, Bootstrap, Chart.js
-│   └── images/                      # Logos and icons
-│
-├── media/                           # User-uploaded files
-│   ├── documents/                   # Uploaded documents
-│   └── profiles/                    # User profile pictures
-│
-├── screenshots/                     # README screenshots (add your images here)
-│   ├── login-page.png
-│   ├── admin-dashboard.png
-│   ├── staff-dashboard.png
-│   └── mobile-views.png
-│
-├── requirements.txt                 # Python dependencies
-├── manage.py
-└── README.md
+
 
 ⚙️ Installation & Setup
 1️⃣ Prerequisites
