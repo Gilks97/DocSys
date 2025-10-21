@@ -10,7 +10,7 @@ __pycache__/
 *.so
 *.egg
 *.egg-info/
-dist/
+/dist/
 build/
 .eggs/
 
@@ -51,12 +51,11 @@ media/
 # ================================
 # Static files
 # ================================
-# Ignore collected static files
-staticfiles/
-# Ignore top-level static directory if generated
-/static/
-# BUT keep app-level static directories
-!*/static/
+# Only ignore the collected static files at root
+/staticfiles/
+
+# Explicitly keep our app static directories
+!/docSys_app/static/
 
 # ================================
 # IDEs / Editors
