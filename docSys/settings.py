@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'docSys_app',
     'whitenoise.runserver_nostatic',  # Added for production static files
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 # Specify custom user model
@@ -36,6 +38,22 @@ AUTH_USER_MODEL = "docSys_app.CustomUser"
 # Where uploads go (dev)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# Cloudinary configuration for media files
+if not DEBUG:
+    # Use Cloudinary in production
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    # Use local media folder in development
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+# Cloudinary config - use environment variables
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
 
 # Auth redirects (optional but nice)
 LOGIN_URL = '/registration/login/'
