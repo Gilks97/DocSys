@@ -154,10 +154,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'docSys_app/static'),
 ]
 
-#STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+#STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 
