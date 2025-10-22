@@ -39,20 +39,22 @@ AUTH_USER_MODEL = "docSys_app.CustomUser"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# Cloudinary configuration for media files
+# Cloudinary configuration for ALL media files
 if not DEBUG:
-    # Use Cloudinary in production
+    # Use Cloudinary for ALL media (profile pics + documents) in production
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    
+    # Optional: Configure Cloudinary for different file types
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+        'static_file_support': False,
+    }
 else:
-    # Use local media folder in development
+    # Use local storage in development
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-
-# Cloudinary config - use environment variables
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
-}
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Auth redirects (optional but nice)
