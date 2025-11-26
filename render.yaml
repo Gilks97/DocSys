@@ -7,7 +7,7 @@ services:
     dockerfilePath: Dockerfile
     envVars:
       - key: DATABASE_URL
-        value: "postgresql://neondb_owner:npg_0tKgelR8uFXc@ep-still-forest-abah5ln9-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
